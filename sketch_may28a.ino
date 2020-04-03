@@ -44,13 +44,22 @@ void loop() {
 // Functie folosita pentru a calcula distanta masurata de senzorul cu ultrasunete
 int calculateDistance(){ 
   
-  digitalWrite(trigPin, LOW); 
-  delayMicroseconds(2);
-  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, LOW); // Se seteaza pinul corespunzator intrarii trig a senzorului cu ultra sunete pe 0 logic
+                              // In aceasta situatie sezorul nu va emite impulsuri de ultra sunete
+  delayMicroseconds(2);       // Delay de 2 microsecunde
+                              // Sets the trigPin on HIGH state for 10 micro seconds
   digitalWrite(trigPin, HIGH); 
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH); // Reads the echoPin, returns the sound wave travel time in microseconds
-  distance = duration*0.034/2;
+  delayMicroseconds(10);      // Se seteaza pinul corespunzator intrarii trig a senzorului cu ultra sunete pe 1 logic
+                              // In aceasta situatie sezorul va emite 8 impulsuri ultrasonice de frecventa 40KHz
+
+  digitalWrite(trigPin, LOW); // Se seteaza pinul corespunzator intrarii trig a senzorului cu ultra sunete pe 0 logic 
+                              // Aceasta pentru a opri trimiterea de impulsuri pentru a se pregati citirea
+
+  duration = pulseIn(echoPin, HIGH); // Citim informatiile de pe echoPin (pin-ul corespunzator iesirii echo a senzorului cu ultra sunete)
+                                      // Functia pulseIn determina cat timp a stat echoPin pe 1 logic
+  distance = duration*0.034/2;  // Aceasta formula ajuta la determinarea distantei in cm
+                                // Formula pleaca de la distanta sunetului in aer
+                                // Viteza sunetului in aer este 343 m/s sau 0,034 cm/μs
+                                // Rezultatul se imparte la 2 datorita timpului necesar impulsurilor de a lovi obiectul detectat si de a se intoarce inapoi la receptor
   return distance;
 }
