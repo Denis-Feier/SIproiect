@@ -1,36 +1,34 @@
-// Includes the Servo library
-#include <Servo.h>.
+#include <Servo.h> //impotarea librariei pentru servo-motor
  
-// Defines Tirg and Echo pins of the Ultrasonic Sensor
-const int trigPin = 10;
-const int echoPin = 11;
+const int trigPin = 10; // setarea pinului trig pentru senzorul cu ultrasunete
+const int echoPin = 11; // setarea pinului echo pentru senzorul cu ultrasunete
 
-// Variables for the duration and the distance
 long duration;
 int distance;
 
-Servo myServo; // Creates a servo object for controlling the servo motor
+Servo myServo; // Referinta catre obiectul servo(pentru a controla servo-motorul)
 
 void setup() {
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  pinMode(trigPin, OUTPUT); // Seteaza trigPin ca output
+  pinMode(echoPin, INPUT); // Seteaza echoPin ca Input
   Serial.begin(9600);
-  myServo.attach(3); // Defines on which pin is the servo motor attached
+  myServo.attach(3); // Setarea pinului la care ii legata intrarea de date a servo-motorului
 }
 
 void loop() {
-  // rotates the servo motor from 15 to 165 degrees
-  for(int i=15;i<=165;i++){  
-  myServo.write(i);
-  delay(5);
-  distance = calculateDistance();// Calls a function for calculating the distance measured by the Ultrasonic sensor for each degree
   
-  Serial.print(i); // Sends the current degree into the Serial Port
-  Serial.print(","); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
-  Serial.print(distance); // Sends the distance value into the Serial Port
-  Serial.print("."); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
+  for(int i=15;i<=165;i++){ // Rotirea servo-motorului de la 15 la 165 de grade
+  myServo.write(i); // Screrea pe pinul corespunzator a valorii unghiului
+  delay(5); // Delay 5 milisecunde
+  distance = calculateDistance();// Functie care calculeaza distanta de la senzorul cu ultrasunete la obiect
+
+  Serial.print(i); // Printeaza unghiul pe seriala
+  Serial.print(","); // Atasarea unui caracter despartitor pentru a putea fi parsat in UI
+  Serial.print(distance); // Printarea distantei masurate pe seriala
+  Serial.print("."); // Caracter '.' remnifica trimiterea cu succes a unui pachet complet de date
   }
-  // Repeats the previous lines from 165 to 15 degrees
+
+  // Repetarea procesului anterior pornind de la 165 de grade si revenind la 15 grade
   for(int i=165;i>15;i--){  
   myServo.write(i);
   delay(30);
@@ -41,7 +39,9 @@ void loop() {
   Serial.print(".");
   }
 }
-// Function for calculating the distance measured by the Ultrasonic sensor
+
+
+// Functie folosita pentru a calcula distanta masurata de senzorul cu ultrasunete
 int calculateDistance(){ 
   
   digitalWrite(trigPin, LOW); 
