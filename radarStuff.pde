@@ -4,15 +4,14 @@ import java.awt.event.KeyEvent; // Importarea bibliotecii pentru a citii date de
                                 // De aceea este necesara folosirea mecanismului de evenimente
 import java.io.IOException;
 
-Serial myPort; // Referinta catre obiectul interfata seriala
+Serial portSeriala; // Referinta catre obiectul interfata seriala
 
-String angle=""; // Unghiul in care este pozitionat servo motorul in format string
-String distance=""; // Distanta de la senzor la obiectul detectat in format string
-String data=""; // Cuvantul de date citit de pe seriala in format string
-String noObject; // String utilizat pentru afisarea mesajelor in UI
+String unghi=""; // Unghiul in care este pozitionat servo motorul in format string
+String distanta=""; // Distanta de la senzor la obiectul detectat in format string
+String cuvantDate=""; // Cuvantul de date citit de pe seriala in format string
 
-float pixsDistance;
-int iAngle, iDistance;
+float distantaPixeli;
+int unghiI, distantaI;
 int index1=0;
 int index2=0;
 // PFont orcFont;
@@ -21,8 +20,8 @@ void setup() {
   
  size (1366, 768); //Setam dimensiunea UI-ului
  smooth();
- myPort = new Serial(this,"COM4", 9600); // Configurarea obiectului interfata seriala
- myPort.bufferUntil('.'); // Separam cuvintele din interfata seriala prin caracterul '.'. Astfel cuvantul pe care o sa il citim o sa contina unghiul despartit de ',' distanta
+ portSeriala = new Serial(this,"COM4", 9600); // Configurarea obiectului interfata seriala
+ portSeriala.bufferUntil('.'); // Separam cuvintele din interfata seriala prin caracterul '.'. Astfel cuvantul pe care o sa il citim o sa contina unghiul despartit de ',' distanta
 //  orcFont = loadFont("OCRAExtended-30.vlw");
 }
 
@@ -36,39 +35,39 @@ void draw() {
   rect(0, 0, width, height-height*0.065);  // Se deseneaza cadranul
   
   fill(98,245,31); // Se alege culoarea verde (urmatoarele obiecte vor fi desenate cu verde)
-  drawRadar(); 
-  drawLine();
-  drawObject();
+  creazaRadar(); 
+  deseneazaLinie();
+  detecteazaObiect();
   // drawText();
 }
 
-void serialEvent (Serial myPort) { // Citim datele de pe portul serial
+void serialEvent (Serial portSeriala) { // Citim datele de pe portul serial
 
   // Citim date de pe interfata seriala pana ajungem la caracterul '.';
-  data = myPort.readStringUntil('.'); 
+  cuvantDate = portSeriala.readStringUntil('.'); 
   // Eliminam caracterul '.' din string
-  data = data.substring(0,data.length()-1);
+  cuvantDate = cuvantDate.substring(0,cuvantDate.length()-1);
   
-  index1 = data.indexOf(","); // Cautam caracterul ',' si punem pozitia acestuia in intex1
-  angle= data.substring(0, index1); // Citim substring-ul de la caracterul de pe pozitia 0 pana la ',' pentru a determina unghiul
-  distance= data.substring(index1+1, data.length()); // Citim distanta pana la obiectul detectat
+  index1 = cuvantDate.indexOf(","); // Cautam caracterul ',' si punem pozitia acestuia in intex1
+  unghi = cuvantDate.substring(0, index1); // Citim substring-ul de la caracterul de pe pozitia 0 pana la ',' pentru a determina unghiul
+  distanta = cuvantDate.substring(index1+1, cuvantDate.length()); // Citim distanta pana la obiectul detectat
   
   // Convertim datele din string in int
-  iAngle = int(angle);
-  iDistance = int(distance);
+  unghiI = int(unghi);
+  distantaI = int(distanta);
 }
 
-void drawRadar() {
+void creazaRadar() {
   pushMatrix();
-  translate(width/2,height-height*0.074); // Mutam originea in mijlocul laturii de jos a cadranului
+  translate(width/2,height-height*0.07); // Mutam originea in mijlocul laturii de jos a cadranului
   noFill(); 
   strokeWeight(2);
   stroke(98,245,31); // Se alege culoarea verde
   // Se deseneaza arcele care formeaza radarul
-  arc(0,0,(width-width*0.0625),(width-width*0.0625),PI,TWO_PI);
-  arc(0,0,(width-width*0.27),(width-width*0.27),PI,TWO_PI);
-  arc(0,0,(width-width*0.479),(width-width*0.479),PI,TWO_PI);
-  arc(0,0,(width-width*0.687),(width-width*0.687),PI,TWO_PI);
+  arc(0,0,(width-width*0.06),(width-width*0.06),PI,TWO_PI); //TWO_PI = 2 * PI 
+  arc(0,0,(width-width*0.25),(width-width*0.25),PI,TWO_PI);
+  arc(0,0,(width-width*0.5),(width-width*0.5),PI,TWO_PI);
+  arc(0,0,(width-width*0.7),(width-width*0.7),PI,TWO_PI);
   // Se deseneaza liniile care formeaza radarul
   line(-width/2,0,width/2,0);
   line(0,0,(-width/2)*cos(radians(30)),(-width/2)*sin(radians(30)));
@@ -80,33 +79,33 @@ void drawRadar() {
   popMatrix();
 }
 
-void drawObject() {
+void detecteazaObiect() {
   pushMatrix();
-  translate(width/2,height-height*0.074); // Mutam originea in mijlocul laturii de jos a cadranului
+  translate(width/2,height-height*0.07); // Mutam originea in mijlocul laturii de jos a cadranului
   strokeWeight(9);
   stroke(255,10,10); // Se seteaza culoarea rosu
-  pixsDistance = iDistance*((height-height*0.1666)*0.025); // Se converteste distanta de la senzor la obiect din cm in pixeli
-  // Se limiteaza distanta pana la 40 cm
-  if(iDistance<40){
+  distantaPixeli = distantaI*((height-height*0.1666)*0.025); // Se converteste distanta de la senzor la obiect din cm in pixeli
+  // Se limiteaza distanta pana la 70 cm
+  if(distantaI<70){
     // Se deseneaza obiectul in functie de distanta si unghi
-  line(pixsDistance*cos(radians(iAngle)),-pixsDistance*sin(radians(iAngle)),(width-width*0.505)*cos(radians(iAngle)),-(width-width*0.505)*sin(radians(iAngle)));
+  line(distantaPixeli*cos(radians(unghiI)),-distantaPixeli*sin(radians(unghiI)),(width-width*0.5)*cos(radians(unghiI)),-(width-width*0.5)*sin(radians(unghiI)));
   }
   popMatrix();
 }
 
-void drawLine() {
+void deseneazaLinie() {
   pushMatrix();
   strokeWeight(9);
   stroke(30,250,60); // Se seteaza culoarea verde
-  translate(width/2,height-height*0.074); // Mutam originea in mijlocul laturii de jos a cadranului
-  line(0,0,(height-height*0.12)*cos(radians(iAngle)),-(height-height*0.12)*sin(radians(iAngle))); // Se deseneaza obiectul in functie de distanta si unghi
+  translate(width/2,height-height*0.07); // Mutam originea in mijlocul laturii de jos a cadranului
+  line(0,0,(height-height*0.12)*cos(radians(unghiI)),-(height-height*0.12)*sin(radians(unghiI))); // Se deseneaza obiectul in functie de distanta si unghi
   popMatrix();
 }
 
 // void drawText() { // draws the texts on the screen
   
 //   pushMatrix();
-//   if(iDistance>40) {
+//   if(distantaI>40) {
 //   noObject = "Out of Range";
 //   }
 //   else {
@@ -124,10 +123,10 @@ void drawLine() {
 //   text("40cm",width-width*0.0729,height-height*0.0833);
 //   textSize(40);
 //   text("Object: " + noObject, width-width*0.875, height-height*0.0277);
-//   text("Angle: " + iAngle +" °", width-width*0.48, height-height*0.0277);
-//   text("Distance: ", width-width*0.26, height-height*0.0277);
-//   if(iDistance<40) {
-//   text("        " + iDistance +" cm", width-width*0.225, height-height*0.0277);
+//   text("unghi: " + unghiI +" °", width-width*0.48, height-height*0.0277);
+//   text("distanta: ", width-width*0.26, height-height*0.0277);
+//   if(distantaI<40) {
+//   text("        " + distantaI +" cm", width-width*0.225, height-height*0.0277);
 //   }
 //   textSize(25);
 //   fill(98,245,60);
