@@ -6,19 +6,19 @@ const int echoSenzor = 11; // setarea pinului echo pentru senzorul cu ultrasunet
 long durataRevenire;
 int distantaObiect;
 
-Servo portSerial; // Referinta catre obiectul servo(pentru a controla servo-motorul)
+Servo portServo; // Referinta catre obiectul servo(pentru a controla servo-motorul)
 
 void setup() {
   pinMode(trigSenzor, OUTPUT); // Seteaza trigSenzor ca output
   pinMode(echoSenzor, INPUT); // Seteaza echoSenzor ca Input
   Serial.begin(9600);
-  portSerial.attach(3); // Setarea pinului la care ii legata intrarea de date a servo-motorului
+  portServo.attach(3); // Setarea pinului la care ii legata intrarea de date a servo-motorului
 }
 
 void loop() {
   
   for(int i=15;i<=165;i++){ // Rotirea servo-motorului de la 15 la 165 de grade
-  portSerial.write(i); // Screrea pe pinul corespunzator a valorii unghiului
+  portServo.write(i); // Screrea pe pinul corespunzator a valorii unghiului
   delay(5); // Delay 5 milisecunde
   distantaObiect = calculeazaDistanta();// Functie care calculeaza distanta de la senzorul cu ultrasunete la obiect
 
@@ -30,8 +30,8 @@ void loop() {
 
   // Repetarea procesului anterior pornind de la 165 de grade si revenind la 15 grade
   for(int i=165;i>15;i--){  
-  portSerial.write(i);
-  delay(30);
+  portServo.write(i);
+  delay(5);
   distantaObie = calculeazaDistanta();
   Serial.print(i);
   Serial.print(",");
@@ -57,6 +57,9 @@ int calculeazaDistanta(){
 
   durataRevenire = pulseIn(echoSenzor, HIGH); // Citim informatiile de pe echoSenzor (pin-ul corespunzator iesirii echo a senzorului cu ultra sunete)
                                       // Functia pulseIn determina cat timp a stat echoSenzor pe 1 logic
+
+
+                                      // Viteza ultrasunetului in aer / 2 pt ca intereseaza numa timpul de lovire nu si cel de intoarcere
   distantaObie = durataRevenire*0.034/2;  // Aceasta formula ajuta la determinarea distantei in cm
                                 // Formula pleaca de la distanta sunetului in aer
                                 // Viteza sunetului in aer este 343 m/s sau 0,034 cm/μs

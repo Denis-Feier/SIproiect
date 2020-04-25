@@ -14,7 +14,6 @@ float distantaPixeli;
 int unghiI, distantaI;
 int index1=0;
 int index2=0;
-// PFont orcFont;
 
 void setup() {
   
@@ -22,23 +21,20 @@ void setup() {
  smooth();
  portSeriala = new Serial(this,"COM4", 9600); // Configurarea obiectului interfata seriala
  portSeriala.bufferUntil('.'); // Separam cuvintele din interfata seriala prin caracterul '.'. Astfel cuvantul pe care o sa il citim o sa contina unghiul despartit de ',' distanta
-//  orcFont = loadFont("OCRAExtended-30.vlw");
+
 }
 
 void draw() {
   
-  // fill(98,245,31);
-  // textFont(orcFont);
- 
   noStroke(); // Dezactivam marginea dreptunghiului care reprezinta cadranul radarului
-  fill(0,4); 
+  fill(0, 4);
   rect(0, 0, width, height-height*0.065);  // Se deseneaza cadranul
   
   fill(98,245,31); // Se alege culoarea verde (urmatoarele obiecte vor fi desenate cu verde)
   creazaRadar(); 
   deseneazaLinie();
   detecteazaObiect();
-  // drawText();
+
 }
 
 void serialEvent (Serial portSeriala) { // Citim datele de pe portul serial
@@ -102,52 +98,3 @@ void deseneazaLinie() {
   popMatrix();
 }
 
-// void drawText() { // draws the texts on the screen
-  
-//   pushMatrix();
-//   if(distantaI>40) {
-//   noObject = "Out of Range";
-//   }
-//   else {
-//   noObject = "In Range";
-//   }
-//   fill(0,0,0);
-//   noStroke();
-//   rect(0, height-height*0.0648, width, height);
-//   fill(98,245,31);
-//   textSize(25);
-  
-//   text("10cm",width-width*0.3854,height-height*0.0833);
-//   text("20cm",width-width*0.281,height-height*0.0833);
-//   text("30cm",width-width*0.177,height-height*0.0833);
-//   text("40cm",width-width*0.0729,height-height*0.0833);
-//   textSize(40);
-//   text("Object: " + noObject, width-width*0.875, height-height*0.0277);
-//   text("unghi: " + unghiI +" °", width-width*0.48, height-height*0.0277);
-//   text("distanta: ", width-width*0.26, height-height*0.0277);
-//   if(distantaI<40) {
-//   text("        " + distantaI +" cm", width-width*0.225, height-height*0.0277);
-//   }
-//   textSize(25);
-//   fill(98,245,60);
-//   translate((width-width*0.4994)+width/2*cos(radians(30)),(height-height*0.0907)-width/2*sin(radians(30)));
-//   rotate(-radians(-60));
-//   text("30°",0,0);
-//   resetMatrix();
-//   translate((width-width*0.503)+width/2*cos(radians(60)),(height-height*0.0888)-width/2*sin(radians(60)));
-//   rotate(-radians(-30));
-//   text("60°",0,0);
-//   resetMatrix();
-//   translate((width-width*0.507)+width/2*cos(radians(90)),(height-height*0.0833)-width/2*sin(radians(90)));
-//   rotate(radians(0));
-//   text("90°",0,0);
-//   resetMatrix();
-//   translate(width-width*0.513+width/2*cos(radians(120)),(height-height*0.07129)-width/2*sin(radians(120)));
-//   rotate(radians(-30));
-//   text("120°",0,0);
-//   resetMatrix();
-//   translate((width-width*0.5104)+width/2*cos(radians(150)),(height-height*0.0574)-width/2*sin(radians(150)));
-//   rotate(radians(-60));
-//   text("150°",0,0);
-//   popMatrix(); 
-// }
