@@ -44,8 +44,6 @@ void loop() {
 
 // Functie folosita pentru a calcula distanta masurata de senzorul cu ultrasunete
 int calculeazaDistanta(){ 
-  
-  int distantaObie;
 
   digitalWrite(trigSenzor, LOW); // Se seteaza pinul corespunzator intrarii trig a senzorului cu ultra sunete pe 0 logic
                               // In aceasta situatie sezorul nu va emite impulsuri de ultra sunete
@@ -63,9 +61,9 @@ int calculeazaDistanta(){
 
 
                                       // Viteza ultrasunetului in aer / 2 pt ca intereseaza numa timpul de lovire nu si cel de intoarcere
-  distantaObie = durataRevenire*0.034/2;  // Aceasta formula ajuta la determinarea distantei in cm
+  durataRevenire = durataRevenire*0.034/2;  // Aceasta formula ajuta la determinarea distantei in cm
                                 // Formula pleaca de la distanta sunetului in aer
                                 // Viteza sunetului in aer este 343 m/s sau 0,034 cm/μs
                                 // Rezultatul se imparte la 2 datorita timpului necesar impulsurilor de a lovi obiectul detectat si de a se intoarce inapoi la receptor
-  return distantaObie;
+  return durataRevenire;
 }
