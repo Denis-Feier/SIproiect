@@ -20,11 +20,11 @@ void loop() {
   for(int i=15;i<=165;i++){ // Rotirea servo-motorului de la 15 la 165 de grade
   portServo.write(i); // Screrea pe pinul corespunzator a valorii unghiului
   delay(5); // Delay 5 milisecunde
-  distantaObiect = calculeazaDistanta();// Functie care calculeaza distanta de la senzorul cu ultrasunete la obiect
-
+  distantaObiect = calculeazaDistanta(); // Functie care calculeaza distanta de la senzorul cu ultrasunete la obiect
+  //unghi,distanta. unghi,distanta. unghi,distanta. unghi,distanta.
   Serial.print(i); // Printeaza unghiul pe seriala
   Serial.print(","); // Atasarea unui caracter despartitor pentru a putea fi parsat in UI
-  Serial.print(distantaObie); // Printarea distantei masurate pe seriala
+  Serial.print(distantaObiect); // Printarea distantei masurate pe seriala
   Serial.print("."); // Caracter '.' remnifica trimiterea cu succes a unui pachet complet de date
   }
 
@@ -32,18 +32,21 @@ void loop() {
   for(int i=165;i>15;i--){  
   portServo.write(i);
   delay(5);
-  distantaObie = calculeazaDistanta();
+  distantaObiect = calculeazaDistanta();
   Serial.print(i);
   Serial.print(",");
-  Serial.print(distantaObie);
+  Serial.print(distantaObiect);
   Serial.print(".");
   }
+
 }
 
 
 // Functie folosita pentru a calcula distanta masurata de senzorul cu ultrasunete
 int calculeazaDistanta(){ 
   
+  int distantaObie;
+
   digitalWrite(trigSenzor, LOW); // Se seteaza pinul corespunzator intrarii trig a senzorului cu ultra sunete pe 0 logic
                               // In aceasta situatie sezorul nu va emite impulsuri de ultra sunete
   delayMicroseconds(2);       // Delay de 2 microsecunde
