@@ -17,7 +17,7 @@ int index2=0;
 
 void setup() {
   
- size (1366, 768); //Setam dimensiunea UI-ului
+ size (1300, 700); //Setam dimensiunea UI-ului
  smooth();
  portSeriala = new Serial(this,"COM4", 9600); // Configurarea obiectului interfata seriala
  portSeriala.bufferUntil('.'); // Separam cuvintele din interfata seriala prin caracterul '.'. Astfel cuvantul pe care o sa il citim o sa contina unghiul despartit de ',' distanta
@@ -34,6 +34,7 @@ void draw() {
   creazaRadar(); 
   deseneazaLinie();
   detecteazaObiect();
+  textUnghiulDistanta();
 
 }
 
@@ -98,3 +99,16 @@ void deseneazaLinie() {
   popMatrix();
 }
 
+void textUnghiulDistanta() { // inforamtii text despre masuratoriile radarului 
+  pushMatrix();
+  fill(0,0,0); // se seteaza culoarea negru
+  noStroke();
+  rect(0, height-height*0.065, width, height); // se deseneaza un screen negru sub radar pentru a printa textul
+  fill(98,245,31);
+  textSize(40); //se seteaza dimensiunea textului
+  text("Unghiul: " + unghiI, width-width*0.55, height-height*0.005); 
+    // desenez textul pentru unghi
+  text("\tDistanta: " + distantaI +" cm", width-width*0.30, height-height*0.005);
+    // desenez textul pentru distanta
+  popMatrix(); 
+}
